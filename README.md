@@ -29,7 +29,7 @@ echo "The actual insight" | .knowledge/bin/kb-capture.sh rules no-force-push "Ne
 #    and fix paths to the hooks
 ```
 
-Dependencies: `python3`, `sqlite3`, `jq`, `rg` (ripgrep). Works out of the box on macOS/Linux.
+Dependencies: `python3`, `sqlite3`, `jq`, `rg` (ripgrep). Check with `setup/install.sh` (macOS: `--install` via Homebrew).
 
 ## Layout
 
@@ -50,6 +50,16 @@ Dependencies: `python3`, `sqlite3`, `jq`, `rg` (ripgrep). Works out of the box o
 `kb/` categories: `rules` · `preferences` · `best-practices` · `anti-patterns` ·
 `architecture` · `business-logic` · `errors` · `code-reviews` · `playbooks`.
 
+Demo notes (`kb/rules/git.md`, `kb/architecture/system.md`, `kb/errors/upstream-timeout.md`) show what real entries look like.
+
+## Testing
+
+```bash
+tests/run.sh
+```
+
+Covers index build, BM25 search, capture + duplicate guard, and `kb/` frontmatter checks. CI runs the same on every push.
+
 ## Claude memory (optional)
 
 Index `~/.claude/projects/<slug>/memory/*.md`:
@@ -63,6 +73,10 @@ bin/kb-index.sh
 
 For recall when a component name shows up in the prompt — a note with heading `# Stub: my-service`
 in `kb/architecture/stubs/`. The `kb-recall.sh` hook pulls it when the name appears in the request.
+
+## Contributing
+
+See `CONTRIBUTING.md`.
 
 ## License
 

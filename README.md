@@ -26,8 +26,6 @@ flowchart LR
 
 ![Search → hook recall demo](docs/demo.gif)
 
-_Regenerate: `scripts/record-demo.sh` (needs `asciinema` + `agg`). Cast source: `docs/demo.cast`._
-
 1. You write facts in `kb/` (or capture after a task).
 2. `kb-index.sh` builds a local FTS index (`kb.db`).
 3. On each prompt, `kb-recall.sh` searches and injects the best matches.

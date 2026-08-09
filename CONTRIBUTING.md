@@ -9,10 +9,8 @@ setup/install.sh          # check deps (macOS: setup/install.sh --install)
 bin/kb-validate.sh        # lint kb/ before PR if notes changed
 tests/run.sh              # integration tests
 tests/perf_smoke.sh       # optional local perf check
-shellcheck bin/*.sh hooks/*.sh setup/install.sh tests/*.sh scripts/*.sh
+shellcheck bin/*.sh hooks/*.sh setup/install.sh tests/*.sh
 ```
-
-Regenerate README terminal GIF: `scripts/record-demo.sh` (requires `asciinema` and `agg` from Homebrew).
 
 CI runs the same checks on every push.
 

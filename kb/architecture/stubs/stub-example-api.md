@@ -14,5 +14,5 @@ Demo stub for the recall hook: if the prompt mentions `example-api`, the hook pu
 
 **Layout:** `cmd/` · `internal/service/` · `internal/repo/` · GraphQL or HTTP handlers.
 
-**How to apply:** copy this format for your components in `kb/architecture/stubs/<name>.md`
-with heading `# Stub: <name>`.
+**How to apply:** copy this format for your components in `kb/architecture/stubs/<slug>.md`
+with heading `# Stub: <name>` and `id` matching the filename slug.

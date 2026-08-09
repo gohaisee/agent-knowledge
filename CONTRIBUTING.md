@@ -6,8 +6,10 @@ Thanks for improving agent-knowledge. Keep changes small and focused.
 
 ```bash
 setup/install.sh          # check deps (macOS: setup/install.sh --install)
+bin/kb-validate.sh        # lint kb/ before PR if notes changed
 tests/run.sh              # integration tests
-shellcheck bin/*.sh hooks/*.sh setup/install.sh tests/run.sh scripts/*.sh
+tests/perf_smoke.sh       # optional local perf check
+shellcheck bin/*.sh hooks/*.sh setup/install.sh tests/*.sh scripts/*.sh
 ```
 
 Regenerate README terminal GIF: `scripts/record-demo.sh` (requires `asciinema` and `agg` from Homebrew).
@@ -20,8 +22,9 @@ CI runs the same checks on every push.
 2. Use a unique `id` (kebab-case, matches filename slug).
 3. Pick a category: `rules` · `preferences` · `best-practices` · `anti-patterns` · `architecture` · `business-logic` · `errors` · `code-reviews` · `playbooks`.
 4. Write in plain English — what happened, **why**, **how to apply**. No filler.
-5. Run `bin/kb-index.sh` and `bin/kb-search.sh "<topic>"` to verify recall.
-6. Demo notes in this repo (`source: demo`) show the style; replace them in your own fork with real project facts.
+5. `id` in frontmatter must match filename (`my-slug.md` → `id: my-slug`). Run `bin/kb-validate.sh`.
+6. Run `bin/kb-index.sh` and `bin/kb-search.sh "<topic>"` to verify recall.
+7. Demo notes in this repo (`source: demo`) show the style; replace them in your own fork with real project facts.
 
 ### Adding a new category
 

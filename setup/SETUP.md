@@ -18,6 +18,8 @@ git submodule add https://github.com/gohaisee/agent-knowledge.git agent-knowledg
 
 ## Cursor
 
+See [examples/cursor/WALKTHROUGH.md](../examples/cursor/WALKTHROUGH.md) for a step-by-step setup.
+
 1. Copy `examples/cursor/hooks.json` → `.cursor/hooks.json`
 2. Fix paths: `.knowledge/` or `agent-knowledge/`
 3. Optional: rule `examples/cursor/rules/knowledge-governance.mdc` → `.cursor/rules/`

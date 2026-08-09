@@ -1,12 +1,16 @@
 # agent-knowledge
 
-Lightweight **tool-agnostic** memory for AI agents: markdown in `kb/`, search via local **SQLite FTS5**
-(one `kb.db` file, no daemons, BM25, rebuild in under a second). No Elasticsearch, no vectors —
-for a few hundred notes that's the sweet spot between cost and quality.
+[![CI](https://github.com/gohaisee/agent-knowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/gohaisee/agent-knowledge/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+**Agent memory that stays on your machine** — markdown notes, local SQLite search, hooks that inject context into Cursor or Claude. No cloud, no vectors, no daemon.
+
+Lightweight **tool-agnostic** memory for AI agents: markdown in `kb/`, search via **SQLite FTS5**
+(one `kb.db` file, BM25, rebuild in under a second). For hundreds of notes that's the sweet spot between cost and quality.
 
 ## Why
 
-Every Cursor / Claude Code session shouldn't start from scratch. Rules, decisions, and gotchas pile up
+Every agent session shouldn't start from scratch. Rules, decisions, and gotchas pile up
 and get injected through hooks (top 2 relevant facts per prompt).
 
 ## How it works
@@ -31,23 +35,22 @@ _Regenerate: `scripts/record-demo.sh` (needs `asciinema` + `agg`). Cast source: 
 ## Quick start
 
 ```bash
-# 1. Clone and copy into your repo root (or use as a submodule)
 git clone https://github.com/gohaisee/agent-knowledge.git /tmp/agent-knowledge
 cp -R /tmp/agent-knowledge/. ./.knowledge/
-
-# 2. Build the index
+.knowledge/setup/install.sh
 .knowledge/bin/kb-index.sh
-
-# 3. Search
-.knowledge/bin/kb-search.sh "how to deploy"
-
-# 4. Add a note
-echo "The actual insight" | .knowledge/bin/kb-capture.sh rules no-force-push "Never force push" git
-
-# 5. Wire hooks: see setup/SETUP.md and examples/cursor/hooks.json
+.knowledge/bin/kb-search.sh "force push"
 ```
 
-Dependencies: `python3`, `sqlite3`, `jq`, `rg` (ripgrep). Check with `setup/install.sh` (macOS: `--install` via Homebrew).
+**Wire into your editor:** [Cursor walkthrough](examples/cursor/WALKTHROUGH.md) · [Claude Code walkthrough](examples/claude/WALKTHROUGH.md)
+
+```bash
+# Add a note after you learn something new
+echo "The actual insight" | .knowledge/bin/kb-capture.sh rules my-slug "Short title" tag1
+.knowledge/bin/kb-validate.sh
+```
+
+Dependencies: `python3`, `sqlite3`, `jq`, `rg`. Check with `setup/install.sh` (macOS: `--install` via Homebrew).
 
 ## Layout
 
@@ -59,24 +62,26 @@ Dependencies: `python3`, `sqlite3`, `jq`, `rg` (ripgrep). Check with `setup/inst
 | `bin/kb-index.sh` | Build `kb.db` from `kb/` |
 | `bin/kb-search.sh` | Search (FTS5 BM25, ripgrep fallback) |
 | `bin/kb-capture.sh` | Add a note and rebuild the index |
+| `bin/kb-validate.sh` | Lint notes (ids, frontmatter, min body) |
 | `bin/kb-dont-repeat.sh` | Session exit "don't repeat" (mistakes + optional triage) |
 | `bin/kb-doctor.sh` | Health report: duplicates, category skew |
 | `hooks/` | Recall + session start/end for Cursor/Claude |
-| `examples/` | Sample hooks.json and Cursor rule |
+| `examples/` | Walkthroughs, hooks.json, Cursor rule |
 | `kb.db` | Index artifact (in `.gitignore`) |
 
 `kb/` categories: `rules` · `preferences` · `best-practices` · `anti-patterns` ·
 `architecture` · `business-logic` · `errors` · `code-reviews` · `playbooks`.
 
-Demo notes (`kb/rules/git-no-force-push.md`, `kb/architecture/system.md`, `kb/errors/upstream-timeout.md`) show what real entries look like.
+Demo notes (`kb/rules/git-no-force-push.md`, `kb/architecture/system-overview.md`, `kb/errors/upstream-timeout.md`) show what real entries look like.
 
 ## Testing
 
 ```bash
-tests/run.sh
+tests/run.sh        # integration + validate
+tests/perf_smoke.sh # 1000-note index smoke (optional)
 ```
 
-Covers index build, BM25 search, capture + duplicate guard, and `kb/` frontmatter checks. CI runs the same on every push.
+CI runs shellcheck, integration tests, validate, and perf smoke on every push.
 
 ## Claude memory (optional)
 
@@ -94,7 +99,7 @@ in `kb/architecture/stubs/`. The `kb-recall.sh` hook pulls it when the name appe
 
 ## Contributing
 
-See `CONTRIBUTING.md`.
+See `CONTRIBUTING.md`. Bug reports and ideas welcome via GitHub Issues.
 
 ## License
 

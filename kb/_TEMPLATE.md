@@ -10,6 +10,8 @@ source: <transcripts|memory|review|session>
 
 # Note title (short sentence)
 
+Filename must be `<id>.md`. Run `bin/kb-validate.sh` before commit.
+
 What happened and in what context. One to four sentences, straight to the point.
 
 **Why:** the reason — incident, constraint, or requirement behind this.

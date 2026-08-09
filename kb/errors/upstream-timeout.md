@@ -1,5 +1,5 @@
 ---
-id: api-timeouts
+id: upstream-timeout
 category: errors
 service: example-api
 severity: info

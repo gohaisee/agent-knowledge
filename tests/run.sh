@@ -18,6 +18,10 @@ copy_tree() {
 fail() { echo "FAIL: $*" >&2; exit 1; }
 pass() { echo "ok  $*"; }
 
+# --- repo kb/ must pass validate before temp copy ---
+"$REPO_ROOT/bin/kb-validate.sh" || fail "kb-validate on repo"
+pass "kb-validate on repo"
+
 copy_tree
 export KB_ROOT="$TMP"
 export KB_DB="$TMP/kb.db"
@@ -69,7 +73,7 @@ pass "kb-search CLI returns force-push content"
 
 # --- kb-capture ---
 SLUG="test-capture-$$"
-BODY="Temporary note for integration test."
+BODY="Temporary note for integration test. Must be long enough for kb-validate minimum body length check."
 echo "$BODY" | "$TMP/bin/kb-capture.sh" best-practices "$SLUG" "Test capture note" demo test
 
 NOTE="$TMP/kb/best-practices/$SLUG.md"
@@ -93,35 +97,17 @@ if echo "dup" | "$TMP/bin/kb-capture.sh" best-practices "$SLUG" "Dup" 2>/dev/nul
 fi
 pass "kb-capture rejects duplicate slug"
 
-# --- kb/ structure ---
-python3 - <<'PY' "$TMP/kb"
-import glob, os, re, sys
-kb = sys.argv[1]
-bad = []
-for path in glob.glob(os.path.join(kb, "**", "*.md"), recursive=True):
-    base = os.path.basename(path)
-    if base.startswith("_"):
-        continue
-    rel = os.path.relpath(path, kb)
-    if rel.startswith("templates/"):
-        continue
-    text = open(path, encoding="utf-8").read()
-    if not text.startswith("---"):
-        bad.append(f"{rel}: no frontmatter")
-        continue
-    m = re.match(r"^---\n(.*?)\n---", text, re.S)
-    if not m:
-        bad.append(f"{rel}: bad frontmatter")
-        continue
-    fm = m.group(1)
-    for key in ("id", "category"):
-        if not re.search(rf"^{key}:", fm, re.M):
-            bad.append(f"{rel}: missing {key}")
-if bad:
-    print("\n".join(bad))
-    sys.exit(1)
-PY
-pass "kb/ frontmatter structure"
+# --- kb-validate on temp tree ---
+"$TMP/bin/kb-validate.sh" || fail "kb-validate on temp tree"
+pass "kb-validate on temp tree"
+
+# --- broken frontmatter fails validate ---
+printf '%s\n' 'no frontmatter here' > "$TMP/kb/best-practices/broken-note.md"
+if "$TMP/bin/kb-validate.sh" 2>/dev/null; then
+  fail "kb-validate should reject broken frontmatter"
+fi
+rm -f "$TMP/kb/best-practices/broken-note.md"
+pass "kb-validate rejects missing frontmatter"
 
 echo
-echo "All tests passed."
+echo "All integration tests passed."

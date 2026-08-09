@@ -9,12 +9,29 @@ for a few hundred notes that's the sweet spot between cost and quality.
 Every Cursor / Claude Code session shouldn't start from scratch. Rules, decisions, and gotchas pile up
 and get injected through hooks (top 2 relevant facts per prompt).
 
+## How it works
+
+```mermaid
+flowchart LR
+  A["kb/*.md notes"] --> B["kb-index.sh → kb.db"]
+  B --> C["kb-search.sh / BM25"]
+  D["User prompt"] --> E["kb-recall hook"]
+  C --> E
+  E --> F["Top 2 notes → agent context"]
+```
+
+![Search ranks a note, hook injects it into agent context](docs/demo-flow.png)
+
+1. You write facts in `kb/` (or capture after a task).
+2. `kb-index.sh` builds a local FTS index (`kb.db`).
+3. On each prompt, `kb-recall.sh` searches and injects the best matches.
+
 ## Quick start
 
 ```bash
-# 1. Copy into your repo root (or use as a submodule)
+# 1. Clone and copy into your repo root (or use as a submodule)
+git clone https://github.com/gohaisee/agent-knowledge.git /tmp/agent-knowledge
 cp -R /tmp/agent-knowledge/. ./.knowledge/
-# or keep the folder name: cp -R agent-knowledge ./agent-knowledge
 
 # 2. Build the index
 .knowledge/bin/kb-index.sh
@@ -25,8 +42,7 @@ cp -R /tmp/agent-knowledge/. ./.knowledge/
 # 4. Add a note
 echo "The actual insight" | .knowledge/bin/kb-capture.sh rules no-force-push "Never force push" git
 
-# 5. Cursor: copy examples/cursor/hooks.json → .cursor/hooks.json
-#    and fix paths to the hooks
+# 5. Wire hooks: see setup/SETUP.md and examples/cursor/hooks.json
 ```
 
 Dependencies: `python3`, `sqlite3`, `jq`, `rg` (ripgrep). Check with `setup/install.sh` (macOS: `--install` via Homebrew).
@@ -50,7 +66,7 @@ Dependencies: `python3`, `sqlite3`, `jq`, `rg` (ripgrep). Check with `setup/inst
 `kb/` categories: `rules` · `preferences` · `best-practices` · `anti-patterns` ·
 `architecture` · `business-logic` · `errors` · `code-reviews` · `playbooks`.
 
-Demo notes (`kb/rules/git.md`, `kb/architecture/system.md`, `kb/errors/upstream-timeout.md`) show what real entries look like.
+Demo notes (`kb/rules/git-no-force-push.md`, `kb/architecture/system.md`, `kb/errors/upstream-timeout.md`) show what real entries look like.
 
 ## Testing
 

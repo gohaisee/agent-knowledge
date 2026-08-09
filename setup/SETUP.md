@@ -1,9 +1,11 @@
 # Installing agent-knowledge in a project
 
+Canonical repo: **https://github.com/gohaisee/agent-knowledge**
+
 ## Option A: `.knowledge` folder in the repo root
 
 ```bash
-git clone https://github.com/<you>/agent-knowledge.git /tmp/agent-knowledge
+git clone https://github.com/gohaisee/agent-knowledge.git /tmp/agent-knowledge
 cp -R /tmp/agent-knowledge/. /your-repo/.knowledge/
 # or symlink: ln -s ../agent-knowledge /your-repo/.knowledge
 ```
@@ -11,7 +13,7 @@ cp -R /tmp/agent-knowledge/. /your-repo/.knowledge/
 ## Option B: submodule
 
 ```bash
-git submodule add https://github.com/<you>/agent-knowledge.git agent-knowledge
+git submodule add https://github.com/gohaisee/agent-knowledge.git agent-knowledge
 ```
 
 ## Cursor

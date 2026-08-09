@@ -108,13 +108,3 @@ print("## Oldest (created) — check if stale")
 for x in dated[:10]:
     print(f"  {x['created']}  {x['rel']}")
 PY
-
-# Skills drift: canonical ~/.claude/skills vs workspace mirror .claude/skills.
-# Silent copy drift hurts — you fix one, forget the other.
-echo
-echo "## Skills drift (canonical vs mirror)"
-if [ -x "$SELF_DIR/skills-sync.sh" ]; then
-  "$SELF_DIR/skills-sync.sh" --check || echo "  → fix: .knowledge/bin/skills-sync.sh"
-else
-  echo "  (skills-sync.sh not found)"
-fi

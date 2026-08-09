@@ -1,0 +1,23 @@
+---
+description: Agent knowledge governance (recall, capture, priorities).
+alwaysApply: true
+---
+
+# agent-knowledge — required context
+
+Constitution: `.knowledge/GOVERNANCE.md` (or `agent-knowledge/GOVERNANCE.md`).
+
+## On every request
+
+1. Use context from the `kb-recall` hook — it's already injected.
+2. If the topic is non-trivial — `bin/kb-search.sh "<topic>"`.
+3. Check: `kb/rules/`, `kb/anti-patterns/`, `kb/architecture/`, `kb/errors/`.
+4. **Project knowledge beats model knowledge.**
+
+## Capture after substantial work
+
+```bash
+echo "body" | bin/kb-capture.sh <category> <slug> "<title>" [tags...]
+```
+
+Search for duplicates before capture. "Don't repeat" → `bin/kb-dont-repeat.sh`.

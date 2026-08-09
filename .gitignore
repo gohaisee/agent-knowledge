@@ -1,0 +1,6 @@
+# Local search index — artifact, rebuilt from kb/
+kb.db
+kb.db-shm
+kb.db-wal
+.last-kb-doctor
+local/

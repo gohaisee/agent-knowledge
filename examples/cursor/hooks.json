@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "bash .knowledge/hooks/kb-session-start.sh",
+        "timeout": 15
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": "bash .knowledge/hooks/kb-recall.sh",
+        "timeout": 20
+      }
+    ],
+    "sessionEnd": [
+      {
+        "command": "bash .knowledge/hooks/kb-session-end.sh SessionEnd",
+        "timeout": 10
+      }
+    ],
+    "stop": [
+      {
+        "command": "bash .knowledge/hooks/kb-session-end.sh Stop",
+        "timeout": 10
+      }
+    ]
+  }
+}

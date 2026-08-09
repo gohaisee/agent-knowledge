@@ -20,7 +20,9 @@ flowchart LR
   E --> F["Top 2 notes → agent context"]
 ```
 
-![Search ranks a note, hook injects it into agent context](docs/demo-flow.png)
+![Search → hook recall demo](docs/demo.gif)
+
+_Regenerate: `scripts/record-demo.sh` (needs `asciinema` + `agg`). Cast source: `docs/demo.cast`._
 
 1. You write facts in `kb/` (or capture after a task).
 2. `kb-index.sh` builds a local FTS index (`kb.db`).

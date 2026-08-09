@@ -7,8 +7,10 @@ Thanks for improving agent-knowledge. Keep changes small and focused.
 ```bash
 setup/install.sh          # check deps (macOS: setup/install.sh --install)
 tests/run.sh              # integration tests
-shellcheck bin/*.sh hooks/*.sh   # optional but recommended
+shellcheck bin/*.sh hooks/*.sh setup/install.sh tests/run.sh scripts/*.sh
 ```
+
+Regenerate README terminal GIF: `scripts/record-demo.sh` (requires `asciinema` and `agg` from Homebrew).
 
 CI runs the same checks on every push.
 

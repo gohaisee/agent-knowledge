@@ -62,7 +62,7 @@ fi
 
 # --- fallback: ripgrep when index isn't built yet ---
 command -v rg >/dev/null 2>&1 || { echo "[kb-search] need kb.db or ripgrep" >&2; exit 0; }
-PATTERN=$(printf '%s' "$KB_QUERY" | tr 'A-Z' 'a-z' | tr -cs '[:alnum:]' '\n' | awk 'length>=3' | paste -sd'|' -)
+PATTERN=$(printf '%s' "$KB_QUERY" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '\n' | awk 'length>=3' | paste -sd'|' -)
 [ -z "$PATTERN" ] && exit 0
 rg -i -l -e "$PATTERN" -tmd "$KB_ROOT/kb" 2>/dev/null | head -n "$KB_SIZE" | while IFS= read -r f; do
   printf '### %s\n' "$(basename "$f" .md)"
